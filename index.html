@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nemu Energy — Coming Soon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:     #07111c;
+      --gold:     #e8a730;
+      --gold-lt:  #f5c560;
+      --white:    #f5f3ef;
+      --muted:    rgba(245,243,239,0.42);
+      --border:   rgba(245,243,239,0.08);
+      --input-bg: rgba(245,243,239,0.05);
+      --font-d: 'DM Serif Display', serif;
+      --font-b: 'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-b);
+      color: var(--white);
+      background: var(--navy);
+    }
+
+    /* ── FIXED BACKGROUND ── */
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: url(assets/Background.png) center/cover no-repeat;
+    }
+    .bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(7,17,28,0.60) 0%,
+        rgba(7,17,28,0.75) 50%,
+        rgba(7,17,28,0.97) 100%
+      );
+    }
+
+    /* ── FIXED NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.6rem 6vw;
+      background: rgba(7,17,28,0.55);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .logo {
+      font-family: var(--font-d);
+      font-size: 1.4rem;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: 0.01em;
+    }
+    .logo span { color: var(--gold); }
+
+    .nav-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.67rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold-lt);
+      border: 1px solid rgba(232,167,48,0.25);
+      padding: 6px 14px;
+      border-radius: 100px;
+    }
+    .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      animation: blink 2.2s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:0.25; transform:scale(0.5); }
+    }
+
+    /* ══════════════════════════════════════
+       SECTION 1 — HERO
+    ══════════════════════════════════════ */
+    #hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 6vw 60px;
+      overflow: hidden;
+    }
+
+    /* SAND ghost image */
+    .hero-sand {
+      position: absolute;
+      bottom: -4%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(780px, 95vw);
+      opacity: 0.11;
+      pointer-events: none;
+      filter: saturate(0.2) brightness(1.1);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.8rem;
+      animation: fadeUp 0.6s ease 0.1s both;
+    }
+
+    .hero-title {
+      font-family: var(--font-d);
+      font-size: clamp(3.4rem, 9vw, 7.5rem);
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: var(--white);
+      margin-bottom: 1.75rem;
+      animation: fadeUp 0.6s ease 0.2s both;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      font-size: clamp(0.9rem, 1.6vw, 1.05rem);
+      color: var(--muted);
+      line-height: 1.8;
+      font-weight: 300;
+      max-width: 480px;
+      margin-bottom: 3.5rem;
+      animation: fadeUp 0.6s ease 0.3s both;
+    }
+
+    /* scroll cue removed */
+
+    /* ══════════════════════════════════════
+       SHARED SECTION BASE
+    ══════════════════════════════════════ */
+    .section {
+      position: relative;
+      z-index: 1;
+      padding: 70px 6vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .section + .section {
+      border-top: 1px solid var(--border);
+    }
+
+    .section-eyebrow {
+      font-size: 0.67rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .section-title {
+      font-family: var(--font-d);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      text-align: center;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+    .section-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .section-sub {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.8;
+      font-weight: 300;
+      max-width: 440px;
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    /* ══════════════════════════════════════
+       SECTION 2 — CONTACT FORM
+    ══════════════════════════════════════ */
+    #contact {
+      background: rgba(7,17,28,0.4);
+      backdrop-filter: blur(4px);
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 0.63rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    input, textarea {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-family: var(--font-b);
+      font-size: 0.92rem;
+      font-weight: 400;
+      color: var(--white);
+      outline: none;
+      appearance: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    input::placeholder, textarea::placeholder {
+      color: rgba(245,243,239,0.18);
+    }
+    input:focus, textarea:focus {
+      border-color: rgba(232,167,48,0.5);
+      background: rgba(245,243,239,0.08);
+    }
+    textarea {
+      height: 130px;
+      resize: none;
+    }
+
+    .submit-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 4px;
+      padding: 14px 30px;
+      background: var(--gold);
+      color: #06100a;
+      font-family: var(--font-b);
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      align-self: flex-start;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .submit-btn:hover {
+      background: var(--gold-lt);
+      transform: translateY(-2px);
+    }
+    .submit-btn img {
+      height: 12px;
+      filter: brightness(0);
+    }
+
+    .success-msg {
+      display: none;
+      align-items: center;
+      gap: 9px;
+      margin-top: 1rem;
+      font-size: 0.88rem;
+      color: var(--gold-lt);
+    }
+    .success-msg.show { display: flex; }
+
+    /* ══════════════════════════════════════
+       SECTION 3 — INFO BARS
+    ══════════════════════════════════════ */
+    #info {
+      background: rgba(7,17,28,0.5);
+      backdrop-filter: blur(4px);
+    }
+
+    .info-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .info-bar {
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+      padding: 1.1rem 1.4rem;
+      background: rgba(245,243,239,0.04);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    }
+    .info-bar:hover {
+      background: rgba(245,243,239,0.08);
+      border-color: rgba(232,167,48,0.3);
+      transform: translateX(4px);
+    }
+
+    .info-icon {
+      width: 42px; height: 42px;
+      border-radius: 8px;
+      background: rgba(232,167,48,0.08);
+      border: 1px solid rgba(232,167,48,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .info-icon svg {
+      width: 17px; height: 17px;
+      stroke: var(--gold);
+      fill: none;
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .info-text {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .i-label {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .i-val {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--white);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.75rem 6vw;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      background: rgba(5,12,20,0.6);
+    }
+
+    .footer-logo {
+      font-family: var(--font-d);
+      font-size: 1.1rem;
+      color: rgba(245,243,239,0.35);
+      letter-spacing: 0.01em;
+    }
+    .footer-logo span {
+      color: var(--gold);
+      opacity: 0.6;
+    }
+    .footer-copy {
+      font-size: 0.73rem;
+      color: rgba(245,243,239,0.2);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(22px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 600px) {
+      .nav-badge { display: none; }
+      .hero-title { font-size: 3.2rem; }
+      .section { padding: 80px 5vw; }
+      .section-title { font-size: 2rem; }
+      form, .info-bars { max-width: 100%; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="bg"></div>
+
+  <!-- FIXED NAV -->
+  <nav>
+    <a href="#hero" class="logo">nemu<span>energy</span></a>
+    <div class="nav-badge">
+      <span class="dot"></span>
+      Under construction
+    </div>
+  </nav>
+
+
+  <!-- ══ 1. HERO ══════════════════════════════════ -->
+  <section id="hero">
+    <img class="hero-sand" src="hehe" alt="">
+    <div class="hero-content">
+      <div class="hero-label">Nemu Energy · Ulaanbaatar, Mongolia</div>
+      <h1 class="hero-title">
+        Website<br>under<br><em>construction.</em>
+      </h1>
+      <p class="hero-sub">
+        We're building something worth the wait.
+        Sand battery technology designed for Mongolia's energy future.
+      </p>
+
+    </div>
+  </section>
+
+
+  <!-- ══ 2. CONTACT FORM ══════════════════════════ -->
+  <div class="section" id="contact">
+    <div class="section-eyebrow">Send a message</div>
+    <h2 class="section-title">Get in <em>touch.</em></h2>
+    <p class="section-sub">
+      Partnership, investment, or just curious about the technology?
+      We'd love to hear from you.
+    </p>
+
+    <form action="https://api.web3forms.com/submit" method="POST">
+      <input type="hidden" name="access_key" value="e3680e9c-fdde-43a2-98c1-5447fb8c3043">
+
+      <div>
+        <label class="field-label" for="name">Your name</label>
+        <input type="text" id="name" name="name" placeholder="Your name" required>
+      </div>
+
+      <div>
+        <label class="field-label" for="email">Email address</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+      </div>
+
+      <div>
+        <label class="field-label" for="msg">Message</label>
+        <textarea id="msg" name="message" placeholder="Tell us what's on your mind..." required></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn">
+        Send message
+        <img src="assets/arrow_icon.png" alt="">
+      </button>
+    </form>
+
+    <div class="success-msg" id="successMsg">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <circle cx="8" cy="8" r="7" stroke="#e8a730" stroke-width="1.5"/>
+        <path d="M5 8l2 2 4-4" stroke="#e8a730" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Message sent — we'll be in touch soon.
+    </div>
+  </div>
+
+
+  <!-- ══ 3. INFO BARS ══════════════════════════════ -->
+  <div class="section" id="info">
+    <div class="section-eyebrow">Find us</div>
+    <h2 class="section-title">Contact <em>information.</em></h2>
+
+    <div class="info-bars">
+
+      <a href="mailto:Bayarsanaal@gmail.com" class="info-bar">
+        <div class="info-icon">
+          <svg viewBox="0 0 24 24">
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+            <path d="M2 7l10 7 10-7"/>
+          </svg>
+        </div>
+        <div class="info-text">
+          <span class="i-label">Email</span>
+          <span class="i-val">Bayarsanaal@gmail.com</span>
+        </div>
+      </a>
+
+      <a href="tel:+97699999999" class="info-bar">
+        <div class="info-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.95 12a19.79 19.79 0 01-3.07-8.67A2 2 0 012.86 1.5h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 9.4a16 16 0 006.29 6.29l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+          </svg>
+        </div>
+        <div class="info-text">
+          <span class="i-label">Phone</span>
+          <!-- EDIT: replace with real phone number -->
+          <span class="i-val">+976 88100557</span>
+        </div>
+      </a>
+
+      <a href="https://maps.google.com/?q=Ulaanbaatar,Mongolia" target="_blank" class="info-bar">
+        <div class="info-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+        </div>
+        <div class="info-text">
+          <span class="i-label">Location</span>
+          <span class="i-val">Ulaanbaatar, Mongolia</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">nemu<span>energy</span></div>
+    <div class="footer-copy">© 2026 Nemu Energy. Ulaanbaatar, Mongolia.</div>
+  </footer>
+
+
+  <script>
+    const form = document.querySelector('form');
+    const msg  = document.getElementById('successMsg');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = form.querySelector('button');
+      const original = btn.innerHTML;
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: new FormData(form)
+        });
+        if (res.ok) {
+          form.reset();
+          msg.classList.add('show');
+          btn.textContent = 'Sent ✓';
+        } else {
+          btn.innerHTML = original;
+          btn.disabled = false;
+        }
+      } catch {
+        form.submit();
+      }
+    });
+  </script>
+
+</body>
+</html>
